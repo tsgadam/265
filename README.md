@@ -28,7 +28,6 @@ Convert your Plex library video content to HEVC (can be used without Plex)
     Place script files and xml files into C:\Temp\265\
 
     Add C:\Temp\265\ to your system PATH env variable to be able to run from anywhere
-    Command Prompt: SET PATH=%PATH%;"C:\Temp\265\"
     
     Place the included JSON file into the installation folder (C:\Temp\265\)
 
