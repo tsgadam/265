@@ -1,6 +1,5 @@
 # 265
 Convert your Plex library video content to HEVC (can be used without Plex)
-
 .SYNOPSIS   
          
      This script is designed to check and convert video files based on a custom setting file from HandBrake.
@@ -25,20 +24,20 @@ Convert your Plex library video content to HEVC (can be used without Plex)
 
 .DEFAULT INSTALLATION:
     
-    Place script files and xml files into C:\Program Files\Handbrake\
+    Place script files and xml files into C:\Temp\265\
 
-    Add C:\Program Files\Handbrake\ to your system PATH env variable to be able to run from anywhere
-    Command Prompt: SET PATH=%PATH%;"C:\Program Files\Handbrake\"
+    Add C:\Temp\265\ to your system PATH env variable to be able to run from anywhere
+    Command Prompt: SET PATH=%PATH%;"C:\Temp\265\"
     
-    Place the included JSON file into the HandBrake folder (C:\Program Files\Handbrake)
+    Place the included JSON file into the installation folder (C:\Temp\265\)
 
-    Extract HandbrakeCLI into the Handbrake folder (C:\Program Files\Handbrake\)
+    Place the HandbrakeCLI executable into C:\Temp\265\
         Downloadable from:      https://handbrake.fr/downloads2.php
 
-    Place the Handle executables into C:\Program Files\Handle\
+    Place the Handle executables into C:\Temp\265\
         Downloadable from:      https://docs.microsoft.com/en-us/sysinternals/downloads/handle
 
-    Place MediaInfoCLI executable into C:\Program Files\MediaInfo_CLI_19.07_Windows_x64\
+    Place MediaInfoCLI executable into C:\Temp\265\
         Downloadable from:      https://mediaarea.net/en/MediaInfo/Download/Windows
 
     Plex installed into default location: C:\Program Files (x86)\Plex\Plex Media Server\
@@ -112,4 +111,74 @@ Convert your Plex library video content to HEVC (can be used without Plex)
     Use cases could include a post-download task.
 
     To skip the Plex Media Scan, add the following: -SkipPlexScan
+
+
+
+
+
+.CHANGE LOG
+############################################## 
+#Script Title: HEVC Video Converter
+#Script File Name: 265.ps1  
+#Author: Adam Callaghan 
+#Date Created: 25/7/2019  
+############################################## 
+
+V1.00 | First release
+V1.01 | Added parameter/switch to run in quiet mode by not showing command windows for HandBrake, Plex and MediaInfo.
+V1.02 | Changed file actions to use -LiteralPath where possible to fix problem with files/folders with square brackets []
+        Added a counter into the loop of how many files are in the queue and a count down of how many are left.
+        Added functon (CheckJSON) to check the HandBrake preset file for a known problematic string.
+        Fixed issue with creating the new folder if square brakets [] are used in the file/folder name.
+        Updated screen outputs to consistent and aligned format.
+        Replaced quiet mode by setting it as the default and created new switch for ShowWindows, allowing the user to show processing windows. 
+        Changed default refresh interval to 60 seconds.
+        Fixed issue of not being able to count single file in the list.
+        Fixed issue of existing file in processing folder by recreating the folder structure instead of moving all files into one folder.
+        User switch added to skip the Plex Scan.
+        Fixed error with MediaInfo format check where it was reading the wrong variable and always returning false and converting even if HEVC.
+V1.03 | Amended text file paths prior to starting the HandBrake conversion.
+        Added Handle as a required program.
+        Added a function to check the locked status of any file and use Handle to lookup the locking process.
+        Updated the HandBrake conversion process to check for the process ID it spawned and not the HandBrake executable. This allows multiple instances
+        of the script to be run without getting stuck.
+        Added start time to the start of the file processing loop.
+        Added screen output referencing the Transcript file instead of just sending the output to null. Sending it to screen normally is too basic.
+        Slight amendment to wording at the start of each file loop, now reads "Starting file" instead of "Starting process for file".
+        Slight amendment to main file list, using : instead of -
+V1.04 | Updated install location to use C:\Temp\265\
+
+
+
+
+.FUTURE DEVELOPMENT
+
+    Move the user settings out to the xml configuration file so that future updates to the script won't overwrite user settings
+
+    Display the reduction of file size in percentage
+
+    If the source folder is now empty, remove it. Try to think of circumstances where this might be a bad idea.
+
+    Add a help section/readme into the file
+
+    Add a disk space check process to warn and pause on low disk space
+
+    Add a parameter to limit number of files to process
+
+    Add a rename function/parameter if the file is already in HEVC format, that way reprocessing the library wont need to check the mediainfo formats.
+    Need to be careful due to Plex processing sequence and adding the files back in as a new item (hence the whoel reason Plex Scan is part of the loop)
+
+    Add timings into the script to show how long things are taking. Can also add in an average time checker and ETA for the whole process.
+
+    User option or input parameter to specify to move or delete the source files.
+
+    Input parameter to send the output to another folder. Useful for converting recent content not yet added to the Plex library
+
+    Input parameter to receive the input folder to be processed. Useful for automating a post process from another application.
+
+    Add a function to read the HB log file and increase the frequency near the end based on remaining time left. This will allow setting a higher refresh value but not
+    be waiting around for the next refresh to check if HB has finished or not.  Or could this actually be better done by checking the process handle more frequently
+    inside that loop?  For instance, update the screen with log info as per user settings but check the process thread more frequently any way.
+
+    Add user option to delete log once completed?
 
